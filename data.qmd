@@ -1,5 +1,134 @@
 # Data
 
+All data was obtained from the Wall Street Journal based on data from Payscale, Inc
+
 ## Description
 
+1.  degrees-that-pay-back.csv
+
+This file contains median salary data (starting, mid-career, percentiles) for various undergraduate majors such as Engineering, Business, Liberal Arts, Healthcare, etc. Useful for seeing salary trajectories and ranges for different majors.
+
+2.  salaries-by-college-type.csv
+
+This file shows median salaries (starting and mid-career) grouped by college type - Engineering colleges, Liberal Arts colleges, Ivy League schools, etc. Gives salary outcomes based on college types rather than majors specifically.
+
+3.  salaries-by-region.csv
+
+This file aggregates salaries by region - West, Midwest, Northeast, South. Shows range of salaries for graduates from schools in different geographic areas. Helps compare regional salary differences.
+
+### Format:
+
+-   Data is structured as CSV files with header rows naming each column, and subsequent rows containing the data values
+-   There is a mix of text and numeric data in columns
+-   Varying number of columns across the files (13-16 columns)
+
+### Dimensions:
+
+-   degrees-that-pay-back.csv: 32 rows x 16 columns
+-   salaries-by-college-type.csv: 130 rows x 12 columns
+-   salaries-by-region.csv: 344 rows x 12 columns
+
+### Issues:
+
+-   Some inconsistent formatting (e.g. school names sometimes abbreviated, use of "---" instead of "N/A")
+-   Salary columns contain string values with "\$" and "," formatting rather than standardized numeric values
+-   It is not clear what year(s) the salary data represents
+
 ## Missing value analysis
+
+We took a look at the % of missing values per column in each table (all the code is below the analysis points):
+
+1.  degrees-that-pay-back.csv:
+
+-   No missing values
+
+2.  salaries-by-college-type.csv:
+
+-   Mid-Career 10th Percentile Salary: approx 14% missing
+-   Mid-Career 90th Percentile Salary: approx 26% missing
+-   Other columns are complete
+
+3.  salaries-by-region.csv:
+
+-   Mid-Career 10th Percentile Salary: approx 14% missing
+-   Mid-Career 90th Percentile Salary: approx 14% missing
+-   Other columns are complete
+
+So the main missing data is related to the salary range percentiles in some cases. We could consider dropping those columns or trying imputation methods to fill them in for analysis.
+
+## CODE:
+
+```{r}
+degrees_that_pay_back <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//degrees-that-pay-back.csv")
+
+salaries_by_college_type <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//salaries-by-college-type.csv")
+  
+salaries_by_region <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//salaries-by-region.csv")
+```
+
+### Exploring the data
+
+#### Table : degrees_that_pay_back
+
+```{r}
+for (col in colnames(degrees_that_pay_back)){
+  print(col)
+}
+```
+
+```{r}
+head(degrees_that_pay_back,5)
+```
+
+#### Table : salaries_by_college_type
+
+```{r}
+for (col in colnames(salaries_by_college_type)){
+  print(col)
+}
+```
+
+```{r}
+head(salaries_by_college_type,5)
+```
+
+#### Table : salaries_by_region
+
+```{r}
+for (col in colnames(salaries_by_region)){
+  print(col)
+}
+```
+
+```{r}
+head(salaries_by_region,5)
+```
+
+### Missing Value Analysis
+
+```{r}
+cat("For degrees_that_pay_back:", "\n", "\n")
+degrees_missing <- sapply(degrees_that_pay_back, function(x) {
+  mean(x == "N/A") * 100 
+})
+
+print(degrees_missing)
+```
+
+```{r}
+cat("For salaries_by_college_type:", "\n", "\n")
+college_missing <- sapply(salaries_by_college_type, function(x) {
+  mean(x == "N/A") * 100 
+})
+
+print(college_missing)
+```
+
+```{r}
+cat("For salaries_by_region:", "\n", "\n")
+region_missing <- sapply(salaries_by_region, function(x) {
+  mean(x == "N/A") * 100 
+})
+
+print(region_missing)
+```
