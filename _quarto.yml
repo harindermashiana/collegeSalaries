@@ -6,12 +6,12 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Where it pays to attend College"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
-  date: today
+    - Harinder Singh Mashiana (hm3008)
+    - Jahnavi Mulchandani (jm5667)
+  repo-url: https://github.com/harindermashiana/collegeSalaries.git
+  date: 11-29-2023
   page-footer:
     right: |
       This book was built with <a href="https://quarto.org/">Quarto</a>.
