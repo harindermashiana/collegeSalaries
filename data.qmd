@@ -59,6 +59,10 @@ So the main missing data is related to the salary range percentiles in some case
 ## CODE:
 
 ```{r}
+# install.packages(c('viridis', 'tidyverse', 'reshape2'))
+```
+
+```{r}
 degrees_that_pay_back <- read.csv("data//degrees-that-pay-back.csv")
 
 salaries_by_college_type <- read.csv("data//salaries-by-college-type.csv")
