@@ -4,7 +4,7 @@
 
 We chose to study college major choice and post-graduation salaries because it is an important decision that shapes career trajectories for millions of students each year. The three datasets on undergraduate salaries provide a wealth of insights into how expected compensation varies across areas of study, college types, and geographic regions.
 
-For high schoolers debating what to study or where to attend college, few factors matter more than potential return on investment. Students and families have a right to understand how choices of major and college may impact future earnings and career options after graduation. However, quality data on long-term outcomes remains frustratingly opaque at many educational institutions.
+For High Schoolers debating what to study or where to attend college, few factors matter more than potential return on investment. Students and families have a right to understand how choices of major and college may impact future earnings and career options after graduation. However, quality data on long-term outcomes remains frustratingly opaque at many educational institutions.
 
 By integrating data on starting and mid-career salaries by major, college type, and state, my analysis aims to uncover key insights like:
 
