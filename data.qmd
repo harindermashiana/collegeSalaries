@@ -59,11 +59,11 @@ So the main missing data is related to the salary range percentiles in some case
 ## CODE:
 
 ```{r}
-degrees_that_pay_back <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//degrees-that-pay-back.csv")
+degrees_that_pay_back <- read.csv("data//degrees-that-pay-back.csv")
 
-salaries_by_college_type <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//salaries-by-college-type.csv")
+salaries_by_college_type <- read.csv("data//salaries-by-college-type.csv")
   
-salaries_by_region <- read.csv("E://COLUMBIA MS//FALL 2023//EDAV - Joyce Robbins//FINAL PROJECT//data//salaries-by-region.csv")
+salaries_by_region <- read.csv("data//salaries-by-region.csv")
 ```
 
 ### Exploring the data
@@ -132,3 +132,67 @@ region_missing <- sapply(salaries_by_region, function(x) {
 
 print(region_missing)
 ```
+
+```{r}
+library(tidyverse)
+
+# Replacing "N/A" with NA in the entire data frame
+degrees_that_pay_back <- degrees_that_pay_back %>% mutate_all(~ ifelse(. == "N/A", NA, .))
+salaries_by_college_type <- salaries_by_college_type %>% mutate_all(~ ifelse(. == "N/A", NA, .))
+salaries_by_region <- salaries_by_region %>% mutate_all(~ ifelse(. == "N/A", NA, .))
+
+missing_percentage_degrees_that_pay_back <- colMeans(is.na(degrees_that_pay_back)) * 100
+missing_percentage_salaries_by_college_type <- colMeans(is.na(salaries_by_college_type)) * 100
+missing_percentage_salaries_by_region <- colMeans(is.na(salaries_by_region)) * 100
+
+df_degrees_that_pay_back <- data.frame(Column = names(degrees_that_pay_back), Missing_Percentage = missing_percentage_degrees_that_pay_back)
+df_salaries_by_college_type <- data.frame(Column = names(salaries_by_college_type), Missing_Percentage = missing_percentage_salaries_by_college_type)
+df_salaries_by_region <- data.frame(Column = names(salaries_by_region), Missing_Percentage = missing_percentage_salaries_by_region)
+
+combined_df <- bind_rows(
+  mutate(df_degrees_that_pay_back, File = "degrees_that_pay_back"),
+  mutate(df_salaries_by_college_type, File = "File 2"),
+  mutate(df_salaries_by_region, File = "File 3")
+)
+
+ggplot(combined_df, aes(x = Column, y = Missing_Percentage, fill = File)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Missing Values in Each Column",
+       x = "Column",
+       y = "Missing Percentage") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+library(tidyverse)
+library(viridis)
+library(tidyverse)
+library(reshape2)
+# Define function to load CSV files with 'N/A' as missing values
+df1 <- read.csv("data/salaries-by-college-type.csv", na.strings = "N/A")
+df2 <- read.csv("data/salaries-by-region.csv", na.strings = "N/A")
+
+# Function to plot missing values
+plot_missing_values <- function(df, title) {
+  df %>%
+    is.na() %>%
+    melt() %>%
+    ggplot(aes(x = Var2, y = Var1, fill = factor(value, labels = c("Present", "Missing")))) +
+    geom_tile(color = "white") +
+    scale_fill_manual(values = c("Present" = "Green", "Missing" = "Red")) +
+    labs(title = title, x = "Columns", y = "Rows") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+    guides(fill = guide_legend(title = "Values"))
+}
+
+# Plot missing values for each column in the first CSV file
+plot_missing_values(df1, "Missing Values in File 1")
+
+# Plot missing values for each column in the second CSV file
+plot_missing_values(df2, "Missing Values in File 2")
+```
+
+#### Observations from the graph
+
+In both the tables, the missing values of both columns are occuring in the same rows.
