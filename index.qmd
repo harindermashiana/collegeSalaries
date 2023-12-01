@@ -1,1 +1,16 @@
 # Introduction
+
+## Title: Where it Pays to Attend College
+
+We chose to study college major choice and post-graduation salaries because it is an important decision that shapes career trajectories for millions of students each year. The three datasets on undergraduate salaries provide a wealth of insights into how expected compensation varies across areas of study, college types, and geographic regions.
+
+For high schoolers debating what to study or where to attend college, few factors matter more than potential return on investment. Students and families have a right to understand how choices of major and college may impact future earnings and career options after graduation. However, quality data on long-term outcomes remains frustratingly opaque at many educational institutions.
+
+By integrating data on starting and mid-career salaries by major, college type, and state, my analysis aims to uncover key insights like:
+
+- Which majors provide the highest average salaries post-graduation? How much do the top majors outearn the lowest paying majors?
+- Does the earnings boost from certain elite colleges justify their high tuition prices? Or are public colleges in students’ home states the better bargain?
+- How does expected pay from the same major differ across geographic regions? How much of an advantage exists from studying or working in a major city?
+- For a given target salary level, what combinations of major and college type are most promising? What pathways are riskier from an ROI standpoint?
+
+This data allows applicants to look beyond simplistic rankings and assess how academic decisions may impact their career and earning potential. By arming students and families with detailed salary outcomes, colleges can also be held more accountable for the return they provide on expensive four-year investments. Ultimately the goal is to bring greater transparency that promotes affordable degrees and careers aligned to student interests and strengths.
