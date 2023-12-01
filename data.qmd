@@ -3,6 +3,7 @@
 ## Description
 
 ## Missing value analysis
+
 ```{r}
 library(tidyverse)
 file1 <- read.csv("data/degrees-that-pay-back.csv")
@@ -70,7 +71,4 @@ plot_missing_values(df1, "Missing Values in File 1")
 plot_missing_values(df2, "Missing Values in File 2")
 ```
 
-
-
-
-
+We observe that data is missing from same rows for two columns.
