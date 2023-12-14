@@ -92,7 +92,6 @@ ggplot(salaries_reg, aes(x = Mid.Career.Median.Salary, fill = Region)) +
 #### Visual: Mid-career salary distribution by School type
 
 ```{r}
-#| fig.height = 30
 library(tidyverse)
 library(scales)
 
@@ -226,7 +225,6 @@ In this intricate tapestry, the parallel coordinate plot unveils the relationshi
 #### Visual: Parallel coordinate plot showcasing salaries by college type
 
 ```{r}
-  #| fig.height = 200
 library(GGally)
 
 salaries_col$School.Type <- as.factor(salaries_col$School.Type)
@@ -245,7 +243,6 @@ ggparcoord(
 ```
 
 ```{r}
-  #| fig.height = 30
 library(GGally)
 
 salaries_col$School.Type <- as.factor(salaries_col$School.Type)
@@ -269,7 +266,6 @@ Changing the lens, the parallel coordinate plot reimagines our narrative. The co
 #### Visual: Parallel coordinate plot showcasing salaries by region
 
 ```{r}
-# | fig-height: 200
 salaries_reg$Region <- as.factor(salaries_reg$Region)
 salaries_reg$School.Name <- as.factor(salaries_reg$School.Name)
 
@@ -288,7 +284,6 @@ ggparcoord(
 ```
 
 ```{r}
-#| fig-height: 200
 ggparcoord(
   salaries_reg,
   columns = 3:8,
