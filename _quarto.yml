@@ -3,6 +3,7 @@ project:
   output-dir: docs
 
 execute:
+  warning: false
   echo: true
 
 book:

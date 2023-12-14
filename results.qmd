@@ -1,6 +1,6 @@
 # Results
 
-# Unveiling the Tapestry of College Success
+## Unveiling the Tapestry of College Success
 
 Welcome to a journey through the diverse landscape of colleges, majors, and career trajectories. In this data-driven exploration, we aim to uncover patterns, disparities, and intriguing insights that shape the post-graduation landscape.
 
@@ -14,7 +14,7 @@ salaries_reg <- read.csv("data//cleaned_data//salaries-by-region-cleaned.csv")
 
 ## Part 1: Exploring College Diversity
 
-### 1.1 Number of Colleges by Region and Type
+### Number of Colleges by Region and Type
 
 The first brushstroke on our canvas reveals a varied tapestry of colleges. Regions and college types each contribute their unique hues, creating a rich mosaic of educational institutions.
 
@@ -30,7 +30,7 @@ school_counts <- table(salaries_col$School.Type)
 count_df <- data.frame(School.Type = names(school_counts), Count = as.numeric(school_counts))
 
 # Creating a bar chart
-p1 <- ggplot(count_df, aes(x = School.Type, y = Count)) +
+p1 <- ggplot(count_df, aes(x = reorder(School.Type, -Count), y = Count)) +
   geom_bar(stat = "identity", fill = "skyblue", color = "black") +
   labs(title = "Number of Colleges by School Type",
        x = "School Type",
@@ -47,7 +47,7 @@ region_counts <- table(salaries_reg$Region)
 count_df <- data.frame(Region = names(region_counts), Count = as.numeric(region_counts))
 
 # Creating a bar chart
-p2 <- ggplot(count_df, aes(x = Region, y = Count)) +
+p2 <- ggplot(count_df, aes(x = reorder(Region, -Count), y = Count)) +
   geom_bar(stat = "identity", fill = "skyblue", color = "black") +
   labs(title = "Number of Colleges by Region",
        x = "Region",
@@ -58,7 +58,11 @@ p2 <- ggplot(count_df, aes(x = Region, y = Count)) +
 ggarrange(p1, p2, ncol = 2)
 ```
 
-### 1.2 Mid Career Salaries Across the Map
+Most of the colleges in our data set belong to the 'State' category and majority of the colleges are located in the Northeast region of USA. California, although a state and not a region, has a very large number of colleges and hence has been assigned its own category.
+
+We also know that, all the Ivy league schools are located in the Northeast region of USA.
+
+### Mid Career Salaries Across the Map
 
 As we dive deeper, we discover that the financial contours of a career post-college are not uniform. Mid-career salaries vary significantly across regions and college types, unveiling economic landscapes shaped by education.
 
@@ -69,7 +73,7 @@ library(scales)
 salaries_reg %>%
   ggplot(aes(x = `Mid.Career.Median.Salary`)) +
   facet_wrap(~`Region`, ncol = 2) + 
-  geom_histogram(bins = 15) +
+  geom_histogram(bins = 15, fill = "skyblue", color = "black") +
   labs(
     title = "Distribution of Mid-Career Salaries by Region",
     x = "Mid-Career Median Salary"
@@ -89,6 +93,10 @@ ggplot(salaries_reg, aes(x = Mid.Career.Median.Salary, fill = Region)) +
   scale_color_brewer(palette = "Set2") + scale_y_continuous(labels = scales::comma_format())
 ```
 
+Looking at the mid career salaries of graduates from various schools, it is clearly visible that salaries of grads from schools located in the Midwest, West, and South never cross the 110k mark. But there are grads from schools in the Northeast and in California who have received salaries upwards of 110k, a few years into their field.
+
+The peaks of the density curves of the various regions also show the most common salary range for schools in each region.
+
 #### Visual: Mid-career salary distribution by School type
 
 ```{r}
@@ -98,7 +106,7 @@ library(scales)
 salaries_col %>%
   ggplot(aes(x = `Mid.Career.Median.Salary`)) +
   facet_wrap(~`School.Type`, scales = "free_y", ncol = 2) + 
-  geom_histogram(bins = 15) +
+  geom_histogram(bins = 15, fill = "skyblue", color = "black") +
   labs(
     title = "Distribution of Mid-Career Salaries by School Type",
     x = "Mid-Career Median Salary"
@@ -118,9 +126,17 @@ ggplot(salaries_col, aes(x = Mid.Career.Median.Salary, fill = School.Type)) +
   scale_color_brewer(palette = "Set3") + scale_y_continuous(labels = scales::comma_format())
 ```
 
+Graduates from Ivy league schools have the highest salaries a few years into their careers (mid career), as can be seen clearly from the plot above. The lower limit of their mid career salary range itself is 110k which is the upper limit for grads from State and Liberal Arts schools.
+
+Party school grads seem to have the lowest mid career salaries among the available school types, with an upper limit of 100k.
+
+A few engineering schools had grads with mid career salaries upwards of 110k, but still not as high as the ones from Ivy leagues.
+
+The overlaid density curves make it easier to visualize and conclude the above points.
+
 ## Part 2: Decoding Majors and Salaries
 
-### 2.1 Majors that Pay Off
+### Majors that Pay Off
 
 Our exploration of majors provides a surprising revelation. The top 10 majors with the highest starting salaries and mid-career salaries might not be what you expect. Could your passion align with a lucrative career?
 
@@ -135,7 +151,7 @@ majors = degrees
 
 plot1 <- majors %>%
   arrange(desc(`Starting.Median.Salary`)) %>% 
-  top_n(10) %>%
+  top_n(10, wt = `Starting.Median.Salary`) %>%
   mutate(Rank = row_number()) %>%
   ggplot(aes(fill = Undergraduate.Major, y = reorder(Undergraduate.Major, Starting.Median.Salary), x = `Starting.Median.Salary`)) +
   geom_col() + xlim(0, 110000) +
@@ -144,16 +160,20 @@ plot1 <- majors %>%
 
 plot2 <- majors %>% 
   arrange(`Starting.Median.Salary`) %>%
-  top_n(-10)  %>%
+  top_n(-10, wt = `Starting.Median.Salary`)  %>%
   mutate(Rank = row_number()) %>% 
   ggplot(aes(fill = Undergraduate.Major, x = `Starting.Median.Salary`, y = reorder(Undergraduate.Major, Starting.Median.Salary))) +
   geom_col() + xlim(0, 110000) +
   labs(title = "Bottom 10 Majors by Starting Median Salary", x = "Starting Median Salary", y = "Undergraduate Major") +
-  theme_classic() + guides(fill = FALSE)
+  theme_minimal() + guides(fill = FALSE)
 
 
 ggarrange(plot1, plot2, nrow = 2)
 ```
+
+8 out of the top 10 majors by Starting Median Salaries are from the Engineering or related (CS) category. This result is consistent from the conclusion from the above distribution graphs, where we saw engineering majors having higher salary ranges. The other two majors are related to the medical field.
+
+Looking at the bottom 10 majors, there is very little variation among starting salaries of grads from these majors. For comparison, we note that the bottom 3 are Education, Religion, and Spanish.
 
 #### Visual: Top and bottom 10 majors by mid-career salaries
 
@@ -166,7 +186,7 @@ majors = degrees
 
 plot1 <- majors %>%
   arrange(desc(`Mid.Career.Median.Salary`)) %>% 
-  top_n(10) %>%
+  top_n(10, wt = `Mid.Career.Median.Salary`) %>%
   mutate(Rank = row_number()) %>%
   ggplot(aes(fill = Undergraduate.Major, y = reorder(Undergraduate.Major, Mid.Career.Median.Salary), x = `Mid.Career.Median.Salary`)) +
   geom_col() + xlim(0, 110000) +
@@ -175,16 +195,22 @@ plot1 <- majors %>%
 
 plot2 <- majors %>% 
   arrange(`Mid.Career.Median.Salary`) %>%
-  top_n(-10)  %>%
+  top_n(-10, wt = `Mid.Career.Median.Salary`)  %>%
   mutate(Rank = row_number()) %>% 
   ggplot(aes(fill = Undergraduate.Major, x = `Mid.Career.Median.Salary`, y = reorder(Undergraduate.Major, Mid.Career.Median.Salary))) +
   geom_col() + xlim(0, 110000) +
   labs(title = "Bottom 10 Majors by Mid Career Median Salary", x = "Mid Career Median Salary", y = "Undergraduate Major") +
-  theme_classic() + guides(fill = FALSE)
+  theme_minimal() + guides(fill = FALSE)
 
 
 ggarrange(plot1, plot2, nrow = 2)
 ```
+
+There is, however, some major shuffling in the ranking as we move from comparing Starting Salaries to Mid Career Salaries. Now, 7 out of the initial 8 engineering majors have retained their place in the top 10 but Civil Engineering has dropped in ranking. Both the medical majors have also dropped and Math, Physics and Economics, all related to the 'Sciences' have entered the top 10.
+
+For the bottom 10 majors, the last 3 majors (Education, Religion, Spanish) have retained their place (with some shuffling among themselves.) Criminal Justice, Music, and Drama are still in the bottom 10 and there are 4 new entries.
+
+Each of the bottom 10 majors' grads still had a salary less than 60k after working for a few years, while the 10 10 majors' grads had a salary higher than 60k even at the start of their career.
 
 #### Visual: Top and bottom 10 majors by percent change from starting to mid career salary
 
@@ -196,7 +222,7 @@ majors = degrees
 
 plot3 <- majors %>%
   arrange(desc(`Percent.change.from.Starting.to.Mid.Career.Salary`)) %>% 
-  top_n(10) %>%
+  top_n(10, wt = `Percent.change.from.Starting.to.Mid.Career.Salary`) %>%
   mutate(Rank = row_number()) %>%
   ggplot(aes(fill = Undergraduate.Major, y = reorder(Undergraduate.Major, Percent.change.from.Starting.to.Mid.Career.Salary), x = `Percent.change.from.Starting.to.Mid.Career.Salary`)) +
   geom_col() +
@@ -206,19 +232,21 @@ plot3 <- majors %>%
 
 plot4 <- majors %>%
   arrange(desc(`Percent.change.from.Starting.to.Mid.Career.Salary`)) %>% 
-  top_n(10) %>%
+  top_n(10, wt = `Percent.change.from.Starting.to.Mid.Career.Salary`) %>%
   mutate(Rank = row_number()) %>%
   ggplot(aes(fill = Undergraduate.Major, y = reorder(Undergraduate.Major, Percent.change.from.Starting.to.Mid.Career.Salary), x = `Mid.Career.Median.Salary`)) +
   geom_col() +
-  labs(title = "Mid Career Median Salary of Top 10 Majors by Percent.change.from.Starting.to.Mid.Career.Salary", x = "Mid Career Median Salary", y = "Undergraduate Major") +
+  labs(title = "Mid Career Median Salary of Top 10 Majors by Percent.change", x = "Mid Career Median Salary", y = "Undergraduate Major") +
   theme_minimal() + guides(fill = FALSE)
 
 ggarrange(plot3, plot4, nrow = 2)
 ```
 
+From the two adjacent plots above, it is evident that the major that saw the maximum percent increase in the median salary was not the one with the highest mid career median salary. Knowing this is important because, there are many instance where we see headlines like "Philosophy majors saw a 104 percent increment in five years after graduating from college" (an example.) A large portion of the audience is not familiar with how numbers can be manipulated and presented to spread a certain opinion. And students deciding majors for college are among them too (majority.) This can be misleading and hence it becomes important to understand that percents and actual numbers can reveal different insights and one should be careful when reading headlines which present facts using percents.
+
 ## Part 3: The Fine Threads of Salaries
 
-### 3.1 Salaries by College Type (Parallel Coordinate Plot)
+### Salaries by College Type (Parallel Coordinate Plot)
 
 In this intricate tapestry, the parallel coordinate plot unveils the relationships between various salary metrics and school names. Each line represents a school, and the colors tell a story of school types.
 
@@ -239,8 +267,20 @@ ggparcoord(
   boxplot = TRUE,
   # order = c(3, 5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") +  facet_wrap(~ School.Type, ncol = 3)
+  scale_color_brewer(palette = "Set2") +  facet_wrap(~ School.Type, ncol = 3) 
 ```
+
+Key observations from the plot:
+
+-   Starting salaries: Engineering graduates have the highest starting median salaries across all regions, followed by Ivy League graduates. Liberal Arts and Party schools have lower starting salaries.
+
+-   Salary increase: Graduates from all college types experience an increase in median salary from starting to mid-career. Ivy League graduates have the highest percentage increase (99%), followed by Party schools (85%) and Engineering schools (76%). Liberal Arts graduates have a slightly lower increase (74%).
+
+-   Engineering majors have the highest median starting salary at \$80,000, followed by Ivy League graduates at \$75,000, and liberal arts graduates at \$60,000.
+
+-   Engineering majors also have the highest median mid-career salary at \$150,000, followed by Ivy League graduates at \$130,000, and liberal arts graduates at \$100,000.
+
+-   The median mid-career salary for all six school types is higher than the median starting salary. This suggests that, on average, workers can expect their earnings to increase over time.
 
 ```{r}
 library(GGally)
@@ -249,19 +289,23 @@ salaries_col$School.Type <- as.factor(salaries_col$School.Type)
 salaries_col$School.Name <- as.factor(salaries_col$School.Name)
 ggparcoord(
   salaries_col,
-  columns = 3:8,
+  columns = 4:8,
   groupColumn = "School.Type",
   scale = "globalminmax",
-  alphaLines = 0.8,
+  alphaLines = 0.4,
   splineFactor = FALSE,
-  order = c(3, 5, 6, 4, 7, 8)
+  order = c(5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") + facet_wrap(~ School.Type)
+  scale_color_brewer(palette = "Set2") + facet_wrap(~ School.Type) +  scale_y_continuous(labels = scales::comma_format())
 ```
 
-### 3.2 Salaries by Region (Parallel Coordinate Plot)
+We have the 10th, 25th, 50th, 75th, and 90th percentiles of the median mid career salaries for each school in each college type category above. The Parallel Coordinate plots faceted by college type show the range of these values and if there are outliers for each variable.
 
-Changing the lens, the parallel coordinate plot reimagines our narrative. The colors now represent different regions, uncovering geographic nuances in career trajectories.
+For instance, the largest difference between 90th percentile and 10th percentile mid career median salary is for Ivy Leagues. A few party and state schools have a higher 90th percentile value compared to others in their category. These results are similar to analyzing a box plot, only here we are given the values of the percentiles and not the continuous data to determine them.
+
+### Salaries by Region (Parallel Coordinate Plot)
+
+Changing the lens, the parallel coordinate plot re-imagines our narrative. The colors now represent different regions, uncovering geographic nuances in career trajectories.
 
 #### Visual: Parallel coordinate plot showcasing salaries by region
 
@@ -283,20 +327,34 @@ ggparcoord(
   scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3)
 ```
 
+The graph compares the starting and median salaries for different career stages across five regions in the United States: California, Midwestern, Northeastern, Southern, and Western.
+
+-   California boasts the highest median salaries for both starting and mid-career stages, with \$75,000 for starting and \$130,000 for mid-career.
+
+-   The Northeastern region follows closely, with medians of \$70,000 and \$120,000 for starting and mid-career, respectively.
+
+-   Salaries for all regions tend to be higher in the mid-career stage compared to the starting stage, indicating potential for career growth within each region.
+
+-   The Southern and Western regions have the lowest median salaries for both starting and mid-career stages, with medians around \$60,000 and \$100,000, respectively.
+
+-   The Midwestern region occupies the middle ground, with median salaries around \$65,000 for starting and \$110,000 for mid-career.
+
 ```{r}
 ggparcoord(
   salaries_reg,
-  columns = 3:8,
+  columns = 4:8,
   groupColumn = "Region",
   scale = "globalminmax",
   alphaLines = 0.2,
   splineFactor = FALSE,
   showPoints = FALSE,
    boxplot = FALSE,
-  # order = c(3, 5, 6, 4, 7, 8)
+  order = c(5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3)
+  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3) +  scale_y_continuous(labels = scales::comma_format())
 ```
+
+Similar to the PCP faceted by college type, this one is faceted by region. Each region seems to have some outliers in the 75th and 90th percentile variable columns. Mid career salaries of Northeastern colleges have the highest range and that of Western colleges has the lowest.
 
 ## Part 4: Why we are not joining tables
 
@@ -313,11 +371,15 @@ null_value_plot <- result_table %>%
   labs(title = "Null Value Plot for Joined Table",
        x = "Variable",
        y = "School Name") +
-  theme(axis.text.y = element_blank(), axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(axis.text.y = element_blank(), axis.text.x = element_blank())
 
 # Print the plot
 print(null_value_plot)
 ```
+
+In both the tables, salaries-by-region and salaries-by-college-type, we have a column called School.Name. To delve deeper into the data set and see if there are significant relationships between region and college type regarding salaries, we can try merging the two tables. But, when we do that, we observe that the School.Name columns in both the tables are not exactly the same.
+
+When we try merging them, we notice that there are some schools in both tables that are unique to them and not present in the other which created rows with null values. This number of rows with null values is not a small number which we can deal with by dropping the rows, and hence we analyze the two tables separately and try to find a relation without merging them.
 
 # Conclusion: What We've Woven
 
