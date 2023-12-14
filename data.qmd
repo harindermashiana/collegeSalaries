@@ -200,3 +200,48 @@ plot_missing_values(df2, "Missing Values in File 2")
 #### Observations from the graph
 
 In both the tables, the missing values of both columns are occuring in the same rows.
+
+## Cleaning up data and saving the cleaned csv files
+
+```{r}
+degrees_that_pay_back <- read.csv("data//raw_data//degrees-that-pay-back.csv")
+
+salaries_by_college_type <- read.csv("data//raw_data//salaries-by-college-type.csv")
+  
+salaries_by_region <- read.csv("data//raw_data//salaries-by-region.csv")
+```
+
+```{r}
+salaries_col <- salaries_by_college_type
+salaries_col <- na.omit(salaries_col)
+
+salaries_reg <- salaries_by_region
+salaries_reg <- na.omit(salaries_reg)
+
+degrees <- degrees_that_pay_back
+degrees <- na.omit(degrees)
+```
+
+```{r}
+# install.packages("dplyr")
+library(dplyr)
+
+# Converting character strings to numbers for plotting
+
+salaries_col <- salaries_col %>%
+  mutate_at(vars(Mid.Career.Median.Salary, Mid.Career.10th.Percentile.Salary, Mid.Career.25th.Percentile.Salary, Mid.Career.75th.Percentile.Salary, Mid.Career.90th.Percentile.Salary, Starting.Median.Salary), function(x) as.numeric(gsub("[\\$,]", "", x)))
+
+salaries_reg <- salaries_reg %>%
+  mutate_at(vars(Mid.Career.Median.Salary, Mid.Career.10th.Percentile.Salary, Mid.Career.25th.Percentile.Salary, Mid.Career.75th.Percentile.Salary, Mid.Career.90th.Percentile.Salary, Starting.Median.Salary), function(x) as.numeric(gsub("[\\$,]", "", x)))
+
+degrees <- degrees %>%
+  mutate_at(vars(Mid.Career.Median.Salary, Mid.Career.10th.Percentile.Salary, Mid.Career.25th.Percentile.Salary, Mid.Career.75th.Percentile.Salary, Mid.Career.90th.Percentile.Salary, Starting.Median.Salary), function(x) as.numeric(gsub("[\\$,]", "", x)))
+```
+
+```{r}
+write.csv(degrees, "data//cleaned_data//degrees-that-pay-back-cleaned.csv", row.names = FALSE)
+
+write.csv(salaries_col, "data//cleaned_data//salaries-by-college-type-cleaned.csv", row.names = FALSE)
+
+write.csv(salaries_reg, "data//cleaned_data//salaries-by-region-cleaned.csv", row.names = FALSE)
+```

@@ -205,6 +205,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#exploring-the-data" id="toc-exploring-the-data" class="nav-link" data-scroll-target="#exploring-the-data"><span class="toc-section-number">2.3.1</span>  Exploring the data</a></li>
   <li><a href="#missing-value-analysis-1" id="toc-missing-value-analysis-1" class="nav-link" data-scroll-target="#missing-value-analysis-1"><span class="toc-section-number">2.3.2</span>  Missing Value Analysis</a></li>
   </ul></li>
+  <li><a href="#cleaning-up-data-and-saving-the-cleaned-csv-files" id="toc-cleaning-up-data-and-saving-the-cleaned-csv-files" class="nav-link" data-scroll-target="#cleaning-up-data-and-saving-the-cleaned-csv-files"><span class="toc-section-number">2.4</span>  Cleaning up data and saving the cleaned csv files</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/harindermashiana/collegeSalaries.git/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/harindermashiana/collegeSalaries.git/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -720,10 +721,84 @@ Attaching package: 'reshape2'</code></pre>
 <section id="observations-from-the-graph" class="level4" data-number="2.3.2.1">
 <h4 data-number="2.3.2.1" class="anchored" data-anchor-id="observations-from-the-graph"><span class="header-section-number">2.3.2.1</span> Observations from the graph</h4>
 <p>In both the tables, the missing values of both columns are occuring in the same rows.</p>
-
-
 </section>
 </section>
+</section>
+<section id="cleaning-up-data-and-saving-the-cleaned-csv-files" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="cleaning-up-data-and-saving-the-cleaned-csv-files"><span class="header-section-number">2.4</span> Cleaning up data and saving the cleaned csv files</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>degrees_that_pay_back <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//degrees-that-pay-back.csv"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>salaries_by_college_type <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-college-type.csv"</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>salaries_by_region <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-region.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>salaries_col <span class="ot">&lt;-</span> salaries_by_college_type</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>salaries_col <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(salaries_col)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>salaries_reg <span class="ot">&lt;-</span> salaries_by_region</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>salaries_reg <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(salaries_reg)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>degrees <span class="ot">&lt;-</span> degrees_that_pay_back</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>degrees <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(degrees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("dplyr")</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting character strings to numbers for plotting</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>salaries_col <span class="ot">&lt;-</span> salaries_col <span class="sc">%&gt;%</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(Mid.Career.Median.Salary, Mid.Career<span class="fl">.10</span>th.Percentile.Salary, Mid.Career<span class="fl">.25</span>th.Percentile.Salary, Mid.Career<span class="fl">.75</span>th.Percentile.Salary, Mid.Career<span class="fl">.90</span>th.Percentile.Salary, Starting.Median.Salary), <span class="cf">function</span>(x) <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"[</span><span class="sc">\\</span><span class="st">$,]"</span>, <span class="st">""</span>, x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 2 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `Mid.Career.10th.Percentile.Salary = (function (x) ...`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>salaries_reg <span class="ot">&lt;-</span> salaries_reg <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(Mid.Career.Median.Salary, Mid.Career<span class="fl">.10</span>th.Percentile.Salary, Mid.Career<span class="fl">.25</span>th.Percentile.Salary, Mid.Career<span class="fl">.75</span>th.Percentile.Salary, Mid.Career<span class="fl">.90</span>th.Percentile.Salary, Starting.Median.Salary), <span class="cf">function</span>(x) <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"[</span><span class="sc">\\</span><span class="st">$,]"</span>, <span class="st">""</span>, x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 2 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `Mid.Career.10th.Percentile.Salary = (function (x) ...`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>degrees <span class="ot">&lt;-</span> degrees <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(Mid.Career.Median.Salary, Mid.Career<span class="fl">.10</span>th.Percentile.Salary, Mid.Career<span class="fl">.25</span>th.Percentile.Salary, Mid.Career<span class="fl">.75</span>th.Percentile.Salary, Mid.Career<span class="fl">.90</span>th.Percentile.Salary, Starting.Median.Salary), <span class="cf">function</span>(x) <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"[</span><span class="sc">\\</span><span class="st">$,]"</span>, <span class="st">""</span>, x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(degrees, <span class="st">"data//cleaned_data//degrees-that-pay-back-cleaned.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(salaries_col, <span class="st">"data//cleaned_data//salaries-by-college-type-cleaned.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(salaries_reg, <span class="st">"data//cleaned_data//salaries-by-region-cleaned.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

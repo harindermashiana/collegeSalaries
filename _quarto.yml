@@ -16,6 +16,8 @@ book:
     right: |
       This book was built with <a href="https://quarto.org/">Quarto</a>.
   repo-actions: [edit, issue]
+  options:
+    warning: FALSE
   chapters:
     - index.qmd
     - data.qmd
