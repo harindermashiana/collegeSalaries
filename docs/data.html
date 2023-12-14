@@ -305,11 +305,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>degrees_that_pay_back <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//degrees-that-pay-back.csv"</span>)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>degrees_that_pay_back <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//degrees-that-pay-back.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>salaries_by_college_type <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//salaries-by-college-type.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>salaries_by_college_type <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-college-type.csv"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>salaries_by_region <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//salaries-by-region.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>salaries_by_region <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-region.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="exploring-the-data" class="level3" data-number="2.3.1">
@@ -324,7 +324,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Undergraduate.Major"
+<pre><code>[1] "Type.of.Major"
+[1] "Undergraduate.Major"
 [1] "Starting.Median.Salary"
 [1] "Mid.Career.Median.Salary"
 [1] "Percent.change.from.Starting.to.Mid.Career.Salary"
@@ -340,18 +341,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(degrees_that_pay_back,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>    Undergraduate.Major Starting.Median.Salary Mid.Career.Median.Salary
-1            Accounting             $46,000.00               $77,100.00
-2 Aerospace Engineering             $57,700.00              $101,000.00
-3           Agriculture             $42,600.00               $71,900.00
-4          Anthropology             $36,800.00               $61,500.00
-5          Architecture             $41,600.00               $76,800.00
-  Percent.change.from.Starting.to.Mid.Career.Salary
-1                                              67.6
-2                                              75.0
-3                                              68.8
-4                                              67.1
-5                                              84.6
+<pre><code>   Type.of.Major   Undergraduate.Major Starting.Median.Salary
+1       Business            Accounting             $46,000.00
+2    Engineering Aerospace Engineering             $57,700.00
+3        Science           Agriculture             $42,600.00
+4 Social Science          Anthropology             $36,800.00
+5    Engineering          Architecture             $41,600.00
+  Mid.Career.Median.Salary Percent.change.from.Starting.to.Mid.Career.Salary
+1               $77,100.00                                              67.6
+2              $101,000.00                                              75.0
+3               $71,900.00                                              68.8
+4               $61,500.00                                              67.1
+5               $76,800.00                                              84.6
   Mid.Career.10th.Percentile.Salary Mid.Career.25th.Percentile.Salary
 1                        $42,200.00                        $56,100.00
 2                        $64,300.00                        $82,100.00
@@ -494,7 +495,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(degrees_missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                              Undergraduate.Major 
+<pre><code>                                    Type.of.Major 
+                                                0 
+                              Undergraduate.Major 
                                                 0 
                            Starting.Median.Salary 
                                                 0 
@@ -682,8 +685,8 @@ Attaching package: 'reshape2'</code></pre>
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define function to load CSV files with 'N/A' as missing values</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/salaries-by-college-type.csv"</span>, <span class="at">na.strings =</span> <span class="st">"N/A"</span>)</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/salaries-by-region.csv"</span>, <span class="at">na.strings =</span> <span class="st">"N/A"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-college-type.csv"</span>, <span class="at">na.strings =</span> <span class="st">"N/A"</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data//raw_data//salaries-by-region.csv"</span>, <span class="at">na.strings =</span> <span class="st">"N/A"</span>)</span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to plot missing values</span></span>
 <span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>plot_missing_values <span class="ot">&lt;-</span> <span class="cf">function</span>(df, title) {</span>
