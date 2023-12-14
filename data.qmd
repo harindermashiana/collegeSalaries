@@ -63,11 +63,11 @@ So the main missing data is related to the salary range percentiles in some case
 ```
 
 ```{r}
-degrees_that_pay_back <- read.csv("data//degrees-that-pay-back.csv")
+degrees_that_pay_back <- read.csv("data//raw_data//degrees-that-pay-back.csv")
 
-salaries_by_college_type <- read.csv("data//salaries-by-college-type.csv")
+salaries_by_college_type <- read.csv("data//raw_data//salaries-by-college-type.csv")
   
-salaries_by_region <- read.csv("data//salaries-by-region.csv")
+salaries_by_region <- read.csv("data//raw_data//salaries-by-region.csv")
 ```
 
 ### Exploring the data
@@ -173,8 +173,8 @@ library(viridis)
 library(tidyverse)
 library(reshape2)
 # Define function to load CSV files with 'N/A' as missing values
-df1 <- read.csv("data/salaries-by-college-type.csv", na.strings = "N/A")
-df2 <- read.csv("data/salaries-by-region.csv", na.strings = "N/A")
+df1 <- read.csv("data//raw_data//salaries-by-college-type.csv", na.strings = "N/A")
+df2 <- read.csv("data//raw_data//salaries-by-region.csv", na.strings = "N/A")
 
 # Function to plot missing values
 plot_missing_values <- function(df, title) {
