@@ -60,8 +60,6 @@ ggarrange(p1, p2, ncol = 2)
 
 Most of the colleges in our data set belong to the 'State' category and majority of the colleges are located in the Northeast region of USA. California, although a state and not a region, has a very large number of colleges and hence has been assigned its own category.
 
-We also know that, all the Ivy league schools are located in the Northeast region of USA.
-
 ### Mid Career Salaries Across the Map
 
 As we dive deeper, we discover that the financial contours of a career post-college are not uniform. Mid-career salaries vary significantly across regions and college types, unveiling economic landscapes shaped by education.
@@ -133,6 +131,122 @@ Party school grads seem to have the lowest mid career salaries among the availab
 A few engineering schools had grads with mid career salaries upwards of 110k, but still not as high as the ones from Ivy leagues.
 
 The overlaid density curves make it easier to visualize and conclude the above points.
+
+### Top 10 Schools by Mid Career Salary
+
+We will now look at the top 10 schools based on the mid career median salary. Intuitively, they should be in the Northeast or California region and belong to the Ivy League or Engineering type. Let's look into it.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(kableExtra)
+
+salaries_col_raw <- read.csv("data//raw_data//salaries-by-college-type.csv")
+salaries_reg_raw <- read.csv("data//raw_data//salaries-by-region.csv")
+
+salaries_col_raw$Mid.Career.Median.Salary <- as.numeric(gsub("[$,]", "", salaries_col_raw$Mid.Career.Median.Salary))
+
+salaries_reg_raw$Mid.Career.Median.Salary <- as.numeric(gsub("[$,]", "", salaries_reg_raw$Mid.Career.Median.Salary))
+
+salaries_col_raw <- salaries_col_raw[order(salaries_col_raw$Mid.Career.Median.Salary, decreasing = TRUE), ]
+
+# Get the top 10 rows
+
+salaries_reg_raw <- salaries_reg_raw[order(salaries_reg_raw$Mid.Career.Median.Salary, decreasing = TRUE), ]
+
+# Get the top 10 rows
+top_10_schools_reg<- salaries_reg_raw[1:10, ]
+
+school_counts <- top_10_schools_reg %>%
+  group_by(Region) %>%
+  summarise(Num_Schools = n())
+
+print(top_10_schools_reg$School.Name)
+```
+
+```{r}
+# Display the result
+#pie(school_counts$Num_Schools, labels = school_counts$Region, main = 'Distribution of #Schools by Region', col = rainbow(length(school_counts$Region)))
+school_counts$percentage <- school_counts$Num_Schools / sum(school_counts$Num_Schools)*100
+school_counts$percentage <- sprintf("%d%%", school_counts$percentage)
+
+
+# Create a pie chart with percentage labels
+ggplot(school_counts, aes(x = "", y = Num_Schools, fill = Region)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
+  ggtitle("Distribution of Top 10 Schools by Region") +
+  theme_minimal()+
+    theme(axis.text.x = element_blank(), axis.title.x = element_blank())
+```
+
+Evidently, 9 out of the top 10 colleges are in the Northeast and California regions, hence backing our intuition.
+
+### Diving deeper into the Northeast region
+
+Majority of the colleges are in the Northeastern region. Let us try and find some distinct features of the colleges and their salaries in this region compared to the other regions.
+
+```{r}
+#merge dataframes
+library(ggpubr)
+northeastern = subset(salaries_reg_raw,Region=="Northeastern")
+merged_df <- left_join(northeastern, salaries_col_raw, by = "School.Name")
+final_df = na.omit(merged_df, cols = c("School.Type"))
+
+#in north east region salary distribution by college type
+
+school_counts <- final_df %>%
+  group_by(School.Type) %>%
+  summarise(Num_Schools = n())
+
+
+# Display the result
+#pie(school_counts$Num_Schools, labels = school_counts$Region, main = 'Distribution of #Schools by Region', col = rainbow(length(school_counts$Region)))
+school_counts$percentage <- school_counts$Num_Schools / sum(school_counts$Num_Schools)*100
+school_counts$percentage <- round(school_counts$percentage,2)
+school_counts$percentage <- format(school_counts$percentage, trim = TRUE)
+
+#school_counts$percentage <- as.numeric(as.character(school_counts$percentage))
+
+#school_counts$percentage = sprintf("%.2f", school_counts$percentage)
+school_counts$percentage <- sprintf("%s%%", school_counts$percentage)
+
+
+# Create a pie chart with percentage labels
+ggplot(school_counts, aes(x = "", y = Num_Schools, fill = School.Type)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
+  ggtitle("Distribution of School Types in Northeast Region") +
+  theme_minimal()+
+    theme(axis.text.x = element_blank(), axis.title.x = element_blank())
+
+
+plot1 = ggplot(final_df, aes(x = Mid.Career.Median.Salary.x, fill = School.Type)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Distribution of Mid-Career Salaries by School Type in Northeast", 
+       x = "Mid-Career Median Salary",
+       y = "Density") + xlim(25000,150000)+
+  scale_color_brewer(palette = "Set3") + scale_y_continuous(labels = scales::comma_format())
+
+others = subset(salaries_reg_raw,Region!="Northeastern")
+merged_df <- left_join(others, salaries_col_raw, by = "School.Name")
+final_df = na.omit(merged_df, cols = c("School.Type","Mid.Career.Median.Salary.x"))
+
+
+plot2 = ggplot(final_df, aes(x = Mid.Career.Median.Salary.x, fill = School.Type)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Distribution of Mid-Career Salaries in regions other than Northeast",
+       x = "Mid-Career Median Salary",
+       y = "Density") + xlim(25000,150000)+
+  scale_color_brewer(palette = "Set3") + scale_y_continuous(labels = scales::comma_format())
+
+ggarrange(plot1,plot2,nrow=2)
+```
+
+As we can clearly see, the Ivy Leagues group is present only in the Northeast Region's density curve which leads us to the conclusion that all the Ivy leagues are in the North East region of USA. And since Ivy leagues are among the colleges with highest median salaries, we can relate it to the result of Northeastern region having a higher salary range.
 
 ## Part 2: Decoding Majors and Salaries
 
@@ -267,7 +381,8 @@ ggparcoord(
   boxplot = TRUE,
   # order = c(3, 5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") +  facet_wrap(~ School.Type, ncol = 3) 
+  scale_color_brewer(palette = "Set2") +  facet_wrap(~ School.Type, ncol = 3) +
+  labs(title = "PCP: Start & Mid Career Median Salaries by College Type", x = "Variable", y = "Salary")
 ```
 
 Key observations from the plot:
@@ -296,7 +411,8 @@ ggparcoord(
   splineFactor = FALSE,
   order = c(5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") + facet_wrap(~ School.Type) +  scale_y_continuous(labels = scales::comma_format())
+  scale_color_brewer(palette = "Set2") + facet_wrap(~ School.Type) +  scale_y_continuous(labels = scales::comma_format()) +
+  labs(title = "Distribution of Mid Career Median Salaries by College Type", x = "Variable", y = "Salary")
 ```
 
 We have the 10th, 25th, 50th, 75th, and 90th percentiles of the median mid career salaries for each school in each college type category above. The Parallel Coordinate plots faceted by college type show the range of these values and if there are outliers for each variable.
@@ -324,7 +440,8 @@ ggparcoord(
    boxplot = TRUE,
   # order = c(3, 5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3)
+  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3)+
+  labs(title = "PCP: Start & Mid Career Median Salaries by Region", x = "Variable", y = "Salary")
 ```
 
 The graph compares the starting and median salaries for different career stages across five regions in the United States: California, Midwestern, Northeastern, Southern, and Western.
@@ -351,32 +468,7 @@ ggparcoord(
    boxplot = FALSE,
   order = c(5, 6, 4, 7, 8)
 ) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3) +  scale_y_continuous(labels = scales::comma_format())
+  scale_color_brewer(palette = "Set2") +  facet_wrap(~ Region, ncol = 3) +  scale_y_continuous(labels = scales::comma_format()) + labs(title = "Distribution of Mid Career Median Salaries by Region", x = "Variable", y = "Salary")
 ```
 
 Similar to the PCP faceted by college type, this one is faceted by region. Each region seems to have some outliers in the 75th and 90th percentile variable columns. Mid career salaries of Northeastern colleges have the highest range and that of Western colleges has the lowest.
-
-## Part 4: Why we are not joining tables
-
-```{r}
-# Join tables on "school.name"
-result_table <- full_join(salaries_col, salaries_reg, by = "School.Name")
-
-# Plot a null value plot
-null_value_plot <- result_table %>%
-  gather(key, value, -School.Name) %>%
-  ggplot(aes(x = key, y = School.Name, fill = is.na(value))) +
-  geom_tile(color = "white") +
-  scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "green"), guide = FALSE) +
-  labs(title = "Null Value Plot for Joined Table",
-       x = "Variable",
-       y = "School Name") +
-  theme(axis.text.y = element_blank(), axis.text.x = element_blank())
-
-# Print the plot
-print(null_value_plot)
-```
-
-In both the tables, salaries-by-region and salaries-by-college-type, we have a column called School.Name. To delve deeper into the data set and see if there are significant relationships between region and college type regarding salaries, we can try merging the two tables. But, when we do that, we observe that the School.Name columns in both the tables are not exactly the same.
-
-When we try merging them, we notice that there are some schools in both tables that are unique to them and not present in the other which created rows with null values. This number of rows with null values is not a small number which we can deal with by dropping the rows, and hence we analyze the two tables separately and try to find a relation without merging them.

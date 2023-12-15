@@ -6,15 +6,27 @@
   }
 </style> 
 
-<div id="plot">
-</div>
+
 
 
 <div>
   <h3>Select the appropriate category to display the top 10 majors.</h3>
   <button onclick="updateData('Starting Career Salary')">By Starting Median Salary</button>
   <button onclick="updateData('Mid Career Salary')">By Mid Career Median Salary</button>
-  <button onclick="updateData('% change Starting to Mid Career Salary')">By Percent Change Start-Mid Career Salary</button>
+  <button onclick="updateData('%change Starting-Mid Career Salary')">By Percent Change Start-Mid Career Salary</button>
+</div>
+
+<div id="plot">
+</div>
+
+
+
+<div>
+    <h3>Display Top 10 colleges by Mid Career Salary</h3>
+  <button onclick="updateData2('Top College Northeast')">Top College Northeast</button>
+  <button onclick="updateData2('Top Engineering College')">Top Engineering College</button>
+</div>
+<div id="plot2">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
