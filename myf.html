@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Bar Chart with Data Switching</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+<body>
+
+<div>
+    <h3>Select the appropriate category to display the top 10 majors.</h3>
+    <button onclick="updateData('Starting Career Salary')">By Starting Median Salary</button>
+    <button onclick="updateData('Mid Career Salary')">By Mid Career Median Salary</button>
+    <button onclick="updateData('% change Starting to Mid Career Salary')">By Percent Change Start-Mid Career Salary</button>
+</div>
+
+<script>
     // Sample data with categories and values
     let currentData = [
         { category: 'Physician Assistant', value: 74300	 },
@@ -17,7 +36,7 @@
     const svgHeight = 400;
     const margin = { top: 20, right: 20, bottom: 120, left: 120 };
 
-    const svg = d3.select('#plot')
+    const svg = d3.select('body')
         .append('svg')
         .attr('width', svgWidth)
         .attr('height', svgHeight);
@@ -180,3 +199,7 @@
             .attr('x', d => xScale(d.category) + xScale.bandwidth() / 2)
             .attr('y', d => yScale(d.value) - 5);
     }
+</script>
+
+</body>
+</html>

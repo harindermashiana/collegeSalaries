@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Bar Chart for Different Categories</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        /* Add some styling if needed */
+        rect {
+            fill: steelblue;
+        }
+
+        text {
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    // Sample data with categories and values
+    const data = [
+        { category: 'Physician Assistant', value: 74300	 },
+        { category: 'Chemical Engineering', value: 63200 },
+        { category: 'Computer Engineering', value: 61400 },
+        { category: 'Electrical Engineering', value: 60900 },
+        { category: 'Mechanical Engineering', value: 57900},
+        { category: 'Industrial Engineering', value: 57700 },
+        { category: 'Aerospace Engineering', value: 57700 },
+        { category: 'Computer Science', value: 55900 },
+        { category: 'Nursing', value: 54200 },
+        { category: 'Civil Engineering', value: 53900 },
+    ];
+
+    // Set up the SVG container
+    const svgWidth = 500;
+    const svgHeight = 300;
+    const margin = { top: 20, right: 20, bottom: 120, left: 70 };
+
+    const svg = d3.select('body')
+        .append('svg')
+        .attr('width', svgWidth)
+        .attr('height', svgHeight);
+
+    // Set up scales
+    const xScale = d3.scaleBand()
+        .domain(data.map(d => d.category))
+        .range([margin.left, svgWidth - margin.right])
+        .padding(0.1);
+
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.value)])
+        .range([svgHeight - margin.bottom, margin.top]);
+
+    // Create x-axis
+    // Create x-axis
+    svg.append('g')
+        .attr('transform', `translate(0, ${svgHeight - margin.bottom})`)
+        .call(d3.axisBottom(xScale))
+        .selectAll("text")
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end");
+
+    // Create y-axis
+    svg.append('g')
+        .attr('transform', `translate(${margin.left}, 0)`)
+        .call(d3.axisLeft(yScale));
+
+    // Create bars
+    svg.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('x', d => xScale(d.category))
+        .attr('y', d => yScale(d.value))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => svgHeight - margin.bottom - yScale(d.value))
+        .attr('fill', 'steelblue');
+
+    // Optional: Add labels
+    svg.selectAll('text')
+        .data(data)
+        .enter()
+        .append('text')
+        .text(d => d.value)
+        .attr('x', d => xScale(d.category) + xScale.bandwidth() / 2)
+        .attr('y', d => yScale(d.value) - 5)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'white');
+
+    const bars = svg.selectAll('rect')
+    bars.on('mouseover', function () {
+        d3.select(this).attr('fill', 'orange');
+    })
+    .on('mouseout', function () {
+        d3.select(this).attr('fill', 'steelblue');
+    });
+</script>
+
+</body>
+</html>

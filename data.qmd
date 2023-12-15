@@ -71,4 +71,214 @@ plot_missing_values(df1, "Missing Values in File 1")
 plot_missing_values(df2, "Missing Values in File 2")
 ```
 
-hello.
+# State name
+
+```{r}
+# Install and load required libraries
+#install.packages(c("rvest", "tidyverse", "httr"))
+library(rvest)
+library(tidyverse)
+library(httr)
+
+# Function to get state from university name
+get_state_from_university <- function(university_name) {
+  # Construct the search URL
+  base_url <- "https://www.example.com"  # Replace with the actual URL you want to use
+  search_url <- paste0(base_url, "/search?q=", URLencode(university_name))
+
+  # Send HTTP request and retrieve content
+  response <- GET(search_url)
+  content <- content(response, "text")
+
+  # Parse HTML content
+  page <- read_html(content)
+
+  # Extract state information (modify the selector based on the actual HTML structure)
+  state <- page %>%
+    html_nodes("your_selector_here") %>%
+    html_text() %>%
+    str_trim()
+
+  return(state)
+}
+
+# Example usage
+university_name <- "Harvard University"  # Replace with the actual university name
+state <- get_state_from_university(university_name)
+
+# Print the result
+cat("The state for", university_name, "is:", state, "\n")
+
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+
+# Replace 'your_file_path.csv' with the actual path to your CSV file
+data <- read.csv("data/degrees-that-pay-back.csv")
+
+# Convert median salary column to numeric (remove '$' and ',' if present)
+data$Smedian_salary <- as.numeric(gsub("[$,]", "", data$Starting.Median.Salary))
+data$Mmedian_salary <- as.numeric(gsub("[$,]", "", data$Mid.Career.Median.Salary))
+```
+
+```{r}
+data = na.omit(data)
+
+top_10 <- head(data[order(data$Smedian_salary, decreasing = TRUE), ], 10)
+bottom_10 <- head(data[order(data$Smedian_salary), ], 10)
+
+top_10$category = "Top"
+bottom_10$category = "Bottom"
+
+total = rbind(top_10,bottom_10)
+# Plot top 10 majors
+starting_plot = ggplot(total, aes(x = reorder(Undergraduate.Major, -Smedian_salary), y = Smedian_salary)) +
+  geom_bar(stat = "identity", aes(fill = category)) +
+  labs(title = "Top 10 and Bottom 10 Majors - Starting Median Salary",
+       x = "Major Name",
+       y = "Median Salary ($)") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")+
+  ylim(0,110000)
+
+top_10 <- head(data[order(data$Mmedian_salary, decreasing = TRUE), ], 10)
+bottom_10 <- head(data[order(data$Mmedian_salary), ], 10)
+
+top_10$category = "Top"
+bottom_10$category = "Bottom"
+
+total = rbind(top_10,bottom_10)
+
+total$Mmedian_slary = as.numeric(total$Mmedian_salary)
+
+# Plot top 10 majors
+mid_plot = ggplot(total, aes(x = reorder(Undergraduate.Major, -Mmedian_salary), y = Mmedian_salary)) +
+  geom_bar(stat = "identity", aes(fill = category)) +
+  labs(title = "Top 10 and Bottom 10 Majors - Mid Career Median Salary",
+       x = "Major Name",
+       y = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  ylim(0,110000)
+
+grid.arrange(starting_plot, mid_plot, ncol = 2)
+
+```
+
+```{r}
+```
+
+```{r}
+# Find top 10 majors based on highest median salaries
+data$Percent.change.from.Starting.to.Mid.Career.Salary <- as.numeric(data$Percent.change.from.Starting.to.Mid.Career.Salary)
+
+top_10_median <- head(data[order(data$Starting.Median.Salary, decreasing = TRUE), ], 10)
+
+# Find top 10 majors based on highest percentage change
+top_10_percentage_change <- head(data[order(data$Percent.change.from.Starting.to.Mid.Career.Salary, decreasing = TRUE), ], 10)
+top_10_percentage_change$Mmedian_salary <- as.numeric(gsub("[$,]", "", top_10_percentage_change$Mid.Career.Median.Salary))
+# Plot line plot for the top 10 majors with highest median salaries
+
+
+# ggplot(top_10_median, aes(x = reorder(Undergraduate.Major,Starting.Median.Salary), y = Starting.Median.Salary, group = 1)) +
+#   geom_line() +
+#   labs(title = "Top 10 Majors based on Highest Median Salaries",
+#        x = "Undergraduate Major",
+#        y = "Starting Median Salary ($)") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Plot line plot for the top 10 majors with highest percentage change
+# ggplot(top_10_percentage_change, aes(x = reorder(Undergraduate.Major,Percent.change.from.Starting.to.Mid.Career.Salary), y = Percent.change.from.Starting.to.Mid.Career.Salary, group = 1)) +
+#   geom_line() +
+#   geom_point(aes(y=Mmedian_salary))+
+#   labs(title = "Top 10 Majors based on Highest Percentage Change",
+#        x = "Undergraduate Major",
+#        y = "Percentage Change (%)") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# scale_factor = 0.001
+# 
+# ggplot(top_10_percentage_change, aes(x = reorder(Undergraduate.Major, Percent.change.from.Starting.to.Mid.Career.Salary))) +
+#   geom_line(aes(y = Percent.change.from.Starting.to.Mid.Career.Salary, color = "y1"), size = 1.5) +
+#   geom_line(aes(y = Mmedian_salary * 10, color = "y2"), size = 1.5) +
+#   scale_y_continuous(name = "y1", sec.axis = sec_axis(~./10, name = "y2")) +
+#   labs(title = "Line Plot with Two Y-Axes",
+#        x = "X-axis",
+#        y = "Primary Y-axis") +
+#   theme_minimal()
+
+
+```
+
+```         
+
+```
+
+```         
+```
+
+```{}
+```
+
+```{r}
+# 
+# library(ggplot2)
+# library(maps)
+# library(dplyr)
+# 
+# # Read in data
+# df = read.csv('data/salary_potential.csv')
+# 
+# # Summarize count for each state
+# state_count = df %>% 
+#   group_by(state) %>%
+#   summarize(count = n())
+# state_count = na.omit(state_count)
+# state_count$state <- tolower(state_count$state)
+# # Plot
+# ggplot(data = state_count, aes(map_id = state)) + 
+#   geom_map(aes(fill  = count), map = map_data("state")) +
+#   expand_limits(x = map_data("state")$long,
+#                 y = map_data("state")$lat) + 
+#   labs(title="US Map Plotted from CSV Data") +
+#   theme_void()
+```
+
+```{r}
+library(ggplot2)
+library(maps)
+library(dplyr)
+
+# Read in data
+df = read.csv('data/degrees-that-pay-back.csv')
+
+df$Starting.Median.Salary <- as.numeric(gsub("[$,]", "", df$Starting.Median.Salary))
+df$Mid.Career.Median.Salary <- as.numeric(gsub("[$,]", "", df$Mid.Career.Median.Salary))
+df$Percent.change.from.Starting.to.Mid.Career.Salary <- as.numeric(gsub("[$,]", "", df$Percent.change.from.Starting.to.Mid.Career.Salary))
+
+
+#df = na.omit(df)
+# df = drop_na(df,state_name)
+# df$state_name <- tolower(df$state_name)
+# 
+# # Plot
+# ggplot(data = df, aes(map_id = state_name)) + 
+#   geom_map(aes(fill  = early_career_pay), map = map_data("state")) +
+#   expand_limits(x = map_data("state")$long,
+#                 y = map_data("state")$lat) + 
+#   labs(title="US Map Plotted from CSV Data") +
+#   theme_void()
+```
+
+```{r}
+# Assuming your dataframe is named 'your_dataframe' and you want to sort by the column 'your_column'
+df <- df[order(df$Percent.change.from.Starting.to.Mid.Career.Salary, decreasing = TRUE), ]
+
+# Get the top 10 rows
+top_10_values <- df[1:10, ]
+top_10_values
+```
+
+```{}
+```
