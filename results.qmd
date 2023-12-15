@@ -472,28 +472,3 @@ ggparcoord(
 ```
 
 Similar to the PCP faceted by college type, this one is faceted by region. Each region seems to have some outliers in the 75th and 90th percentile variable columns. Mid career salaries of Northeastern colleges have the highest range and that of Western colleges has the lowest.
-
-## Part 4: Why we are not joining tables
-
-```{r}
-# Join tables on "school.name"
-result_table <- full_join(salaries_col, salaries_reg, by = "School.Name")
-
-# Plot a null value plot
-null_value_plot <- result_table %>%
-  gather(key, value, -School.Name) %>%
-  ggplot(aes(x = key, y = School.Name, fill = is.na(value))) +
-  geom_tile(color = "white") +
-  scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "green"), guide = FALSE) +
-  labs(title = "Null Value Plot for Joined Table",
-       x = "Variables",
-       y = "School Name") +
-  theme(axis.text.y = element_blank(), axis.text.x = element_blank())
-
-# Print the plot
-print(null_value_plot)
-```
-
-In both the tables, salaries-by-region and salaries-by-college-type, we have a column called School.Name. To delve deeper into the data set and see if there are significant relationships between region and college type regarding salaries, we can try merging the two tables. But, when we do that, we observe that the School.Name columns in both the tables are not exactly the same.
-
-When we try merging them, we notice that there are some schools in both tables that are unique to them and not present in the other which created rows with null values. This number of rows with null values is not a small number which we can deal with by dropping the rows, and hence we analyze the two tables separately and try to find a relation without merging them.

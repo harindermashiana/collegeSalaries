@@ -213,7 +213,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#salaries-by-college-type-parallel-coordinate-plot" id="toc-salaries-by-college-type-parallel-coordinate-plot" class="nav-link" data-scroll-target="#salaries-by-college-type-parallel-coordinate-plot"><span class="toc-section-number">3.4.1</span>  Salaries by College Type (Parallel Coordinate Plot)</a></li>
   <li><a href="#salaries-by-region-parallel-coordinate-plot" id="toc-salaries-by-region-parallel-coordinate-plot" class="nav-link" data-scroll-target="#salaries-by-region-parallel-coordinate-plot"><span class="toc-section-number">3.4.2</span>  Salaries by Region (Parallel Coordinate Plot)</a></li>
   </ul></li>
-  <li><a href="#part-4-why-we-are-not-joining-tables" id="toc-part-4-why-we-are-not-joining-tables" class="nav-link" data-scroll-target="#part-4-why-we-are-not-joining-tables"><span class="toc-section-number">3.5</span>  Part 4: Why we are not joining tables</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/harindermashiana/collegeSalaries.git/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/harindermashiana/collegeSalaries.git/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -782,39 +781,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Similar to the PCP faceted by college type, this one is faceted by region. Each region seems to have some outliers in the 75th and 90th percentile variable columns. Mid career salaries of Northeastern colleges have the highest range and that of Western colleges has the lowest.</p>
-</section>
-</section>
-</section>
-<section id="part-4-why-we-are-not-joining-tables" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="part-4-why-we-are-not-joining-tables"><span class="header-section-number">3.5</span> Part 4: Why we are not joining tables</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join tables on "school.name"</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>result_table <span class="ot">&lt;-</span> <span class="fu">full_join</span>(salaries_col, salaries_reg, <span class="at">by =</span> <span class="st">"School.Name"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a null value plot</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>null_value_plot <span class="ot">&lt;-</span> result_table <span class="sc">%&gt;%</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(key, value, <span class="sc">-</span>School.Name) <span class="sc">%&gt;%</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> key, <span class="at">y =</span> School.Name, <span class="at">fill =</span> <span class="fu">is.na</span>(value))) <span class="sc">+</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"green"</span>), <span class="at">guide =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Null Value Plot for Joined Table"</span>,</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Variables"</span>,</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"School Name"</span>) <span class="sc">+</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the plot</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(null_value_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>In both the tables, salaries-by-region and salaries-by-college-type, we have a column called School.Name. To delve deeper into the data set and see if there are significant relationships between region and college type regarding salaries, we can try merging the two tables. But, when we do that, we observe that the School.Name columns in both the tables are not exactly the same.</p>
-<p>When we try merging them, we notice that there are some schools in both tables that are unique to them and not present in the other which created rows with null values. This number of rows with null values is not a small number which we can deal with by dropping the rows, and hence we analyze the two tables separately and try to find a relation without merging them.</p>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
