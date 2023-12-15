@@ -1,33 +1,42 @@
 # Interactive graph
 
+```{=html}
 <style>
   * {
     font-family: sans-serif;
   }
-</style> 
+</style>
+```
+<div>
 
+<h3>Select the appropriate category to display the top 10 majors.</h3>
+<p> The below interactive graph combines the three separate bar graphs that we had created during our analysis of top 10 majors by starting median salary, mid career median salary, and percent change between the two, and allows us to view the rankings as per our requirement.</p>
 
+<button onclick="updateData('Starting Career Salary')">By Starting Median Salary</button> <button onclick="updateData('Mid Career Salary')">By Mid Career Median Salary</button> <button onclick="updateData('%change Starting-Mid Career Salary')">By Percent Change Start-Mid Career Salary</button>
+
+</div>
+
+::: {#plot}
+:::
 
 
 <div>
-  <h3>Select the appropriate category to display the top 10 majors.</h3>
-  <button onclick="updateData('Starting Career Salary')">By Starting Median Salary</button>
-  <button onclick="updateData('Mid Career Salary')">By Mid Career Median Salary</button>
-  <button onclick="updateData('%change Starting-Mid Career Salary')">By Percent Change Start-Mid Career Salary</button>
+
+<h3>Display Top 10 colleges by Mid Career Salary</h3>
+<p>SInce we could see that majority of the top colleges were in the Northeast region and Engineering Category, we have created an interactive plot to see the top 10 colleges in both these groups.</p>
+
+<button onclick="updateData2('Top College Northeast')">Top College Northeast</button> <button onclick="updateData2('Top Engineering College')">Top Engineering College</button>
+
 </div>
 
-<div id="plot">
-</div>
+::: {#plot2}
+:::
 
 
 
-<div>
-    <h3>Display Top 10 colleges by Mid Career Salary</h3>
-  <button onclick="updateData2('Top College Northeast')">Top College Northeast</button>
-  <button onclick="updateData2('Top Engineering College')">Top Engineering College</button>
-</div>
-<div id="plot2">
-</div>
-
+```{=html}
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+```
+```{=html}
 <script src="scripts/myscript.js"></script>
+```
