@@ -178,7 +178,7 @@ ggplot(school_counts, aes(x = "", y = Num_Schools, fill = Region)) +
   coord_polar(theta = "y") +
   geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
   ggtitle("Distribution of Top 10 Schools by Region") +
-  theme_minimal()+
+  theme_void()+
     theme(axis.text.x = element_blank(), axis.title.x = element_blank())
 ```
 
@@ -220,7 +220,7 @@ ggplot(school_counts, aes(x = "", y = Num_Schools, fill = School.Type)) +
   coord_polar(theta = "y") +
   geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
   ggtitle("Distribution of School Types in Northeast Region") +
-  theme_minimal()+
+  theme_void()+
     theme(axis.text.x = element_blank(), axis.title.x = element_blank())
 
 
