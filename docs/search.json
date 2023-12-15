@@ -81,7 +81,7 @@
     "href": "d3graph.html",
     "title": "4  Interactive graph",
     "section": "",
-    "text": "<h3>Display Top 10 colleges by Mid Career Salary</h3>\nTop College Northeast Top Engineering College"
+    "text": "Display Top 10 colleges by Mid Career Salary\n\n\nSInce we could see that majority of the top colleges were in the Northeast region and Engineering Category, we have created an interactive plot to see the top 10 colleges in both these groups.\n\n\nTop College Northeast\n\nTop Engineering College"
   },
   {
     "objectID": "conclusion.html",
