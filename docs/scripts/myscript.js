@@ -14,7 +14,7 @@
 
     // Set up the SVG container
     const svgWidth = 600;
-    const svgHeight = 400;
+    const svgHeight = 425;
     const margin = { top: 20, right: 20, bottom: 120, left: 120 };
 
     const svg = d3.select('#plot')
@@ -125,7 +125,7 @@
                 { category: 'Mechanical Engineering', value: 93600 },
                 { category: 'Math', value: 92400 }
             ],
-            '% change Starting to Mid Career Salary': [
+            '%change Starting-Mid Career Salary': [
                 { category: 'Math', value: 103.5 },
                 { category: 'Philosophy', value: 103.5},
                 { category: 'International Relations', value: 97.8	 },
