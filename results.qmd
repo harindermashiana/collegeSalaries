@@ -380,11 +380,3 @@ print(null_value_plot)
 In both the tables, salaries-by-region and salaries-by-college-type, we have a column called School.Name. To delve deeper into the data set and see if there are significant relationships between region and college type regarding salaries, we can try merging the two tables. But, when we do that, we observe that the School.Name columns in both the tables are not exactly the same.
 
 When we try merging them, we notice that there are some schools in both tables that are unique to them and not present in the other which created rows with null values. This number of rows with null values is not a small number which we can deal with by dropping the rows, and hence we analyze the two tables separately and try to find a relation without merging them.
-
-# Conclusion: What We've Woven
-
-As we step back, the picture becomes clear. The journey through college, majors, and careers is complex, nuanced, and individualized. There's no one-size-fits-all, and every decision we make adds a unique thread to our personal tapestry.
-
-# Final Thoughts
-
-In our exploration, we've revealed the interconnectedness of choices, regions, and aspirations. The data tells a story of diversity, challenges, and opportunities. This tapestry is ever-evolving, shaped by the dreams and efforts of each student, contributing to the vibrant mosaic of our collective educational journey.
